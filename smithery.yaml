@@ -1,0 +1,112 @@
+# Smithery Registry — hive-mcp-tax-observer
+# https://smithery.ai
+
+startCommand:
+  type: http
+  configSchema:
+    type: object
+    properties: {}
+    required: []
+  url: https://hive-mcp-tax-observer.onrender.com/mcp
+
+name: hive-mcp-tax-observer
+displayName: Hive Tax Observer — observational tax-event tracking (NOT tax advice or filing)
+version: "1.0.0"
+description: >
+  Observational tax-event tracking for crypto transactions. Given a tx_hash + chain (Base / Ethereum / Solana),
+  classify the transaction as sale, swap, income, or transfer, and surface cost-basis-relevant inputs (holder,
+  asset, amount, counterparty, timestamp). Hive does NOT compute cost basis, file taxes, issue 1099s, or provide
+  tax advice. Real on-chain reads via public RPC. Every response carries the observational disclaimer.
+
+disclaimer: >
+  Hive does not provide tax advice or filing services. This is observational transaction data only. Consult a
+  licensed tax professional for compliance decisions.
+
+author:
+  name: Steve Rotzin
+  email: steve@thehiveryiq.com
+  url: https://www.thehiveryiq.com
+
+license: MIT
+homepage: https://github.com/srotzin/hive-mcp-tax-observer
+repository:
+  type: git
+  url: https://github.com/srotzin/hive-mcp-tax-observer
+
+transport: streamable-http
+endpoint: https://hive-mcp-tax-observer.onrender.com/mcp
+protocol: "2024-11-05"
+
+categories:
+  - finance
+  - tax
+  - compliance
+  - web3
+  - agent-to-agent
+  - observability
+
+tags:
+  - mcp
+  - hive
+  - tax
+  - tax-observer
+  - cost-basis
+  - on-chain
+  - base-l2
+  - ethereum
+  - solana
+  - ai-agents
+  - a2a
+  - observational
+  - real-rails
+
+tools:
+  - name: tax.classify
+    description: >
+      Classify a single on-chain transaction as a taxable event (sale/swap/income/transfer). Surfaces
+      cost-basis-relevant inputs (holder, asset, amount, counterparty, timestamp). Hive does NOT compute
+      cost basis. Hive does NOT provide tax advice or filing services.
+    inputs:
+      - name: tx_hash
+        type: string
+        required: true
+        description: "Transaction hash (EVM 0x-prefixed) or signature (Solana base58)"
+      - name: chain
+        type: string
+        required: true
+        description: "base | ethereum | solana"
+
+  - name: tax.bulk
+    description: >
+      Classify an array of transactions in a single call (max 50). Returns per-tx classification + a
+      by-kind summary. Observational data only. No advice. No filing. No cost-basis computation.
+    inputs:
+      - name: tx_hashes
+        type: array
+        required: true
+        description: "Array of transaction hashes/signatures (max 50)"
+      - name: chain
+        type: string
+        required: true
+        description: "base | ethereum | solana"
+
+  - name: tax.today
+    description: >
+      Count of classified events in the last 24h, broken down by kind (sale / swap / income / transfer)
+      with a taxable-signal subtotal. Free.
+    inputs: []
+
+runtime:
+  type: node
+  version: ">=18"
+  command: node server.js
+  env:
+    - name: PORT
+      default: "3000"
+      required: false
+    - name: HIVE_BASE
+      default: "https://hivemorph.onrender.com"
+      required: false
+    - name: ENABLE
+      default: "true"
+      required: false

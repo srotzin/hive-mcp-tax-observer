@@ -1,0 +1,47 @@
+{
+  "name": "hive-mcp-tax-observer",
+  "version": "1.0.0",
+  "description": "Observational tax-event tracking for crypto transactions. Classifies on-chain txs as sale/swap/income/transfer and surfaces cost-basis-relevant inputs. NOT tax advice. NOT tax filing.",
+  "type": "module",
+  "main": "server.js",
+  "bin": {
+    "hive-mcp-tax-observer": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tax",
+    "tax-observer",
+    "tax-events",
+    "crypto",
+    "on-chain",
+    "base-l2",
+    "ethereum",
+    "solana",
+    "cost-basis",
+    "observational",
+    "hive",
+    "hive-civilization",
+    "agent-to-agent",
+    "a2a",
+    "ai-agents",
+    "real-rails"
+  ],
+  "author": "Steve Rotzin <steve@thehiveryiq.com> (https://www.thehiveryiq.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/srotzin/hive-mcp-tax-observer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srotzin/hive-mcp-tax-observer"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
