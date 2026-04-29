@@ -453,6 +453,32 @@ app.post('/mcp', async (req, res) => {
       case 'tools/call': {
         const name = body.params?.name;
         const args = body.params?.arguments || {};
+        // ─── x402 gate ───────────────────────────────────────────────────
+        // tax.classify: $0.03 USDC/call (30000 atomic)
+        // tax.bulk:     $0.50 USDC/call (500000 atomic)
+        // tax.today:    free (no gate)
+        if (name === 'tax.classify' || name === 'tax.bulk') {
+          const payHdr = req.headers['x-payment'] || req.headers['x-payment-token'] || null;
+          if (!payHdr) {
+            const isClassify = name === 'tax.classify';
+            return res.status(402).json({
+              x402: true,
+              version: '1',
+              tool: name,
+              payTo: '0x15184bf50b3d3f52b60434f8942b7d52f2eb436e',
+              amount_usdc: isClassify ? '0.03' : '0.50',
+              amount_atomic: isClassify ? 30000 : 500000,
+              chain: 'base',
+              chain_id: 8453,
+              asset: 'USDC',
+              contract: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+              brand_gold: '#C08D23',
+              instructions: `Send ${isClassify ? '0.03' : '0.50'} USDC on Base (chain 8453) to 0x15184bf50b3d3f52b60434f8942b7d52f2eb436e. Retry with X-Payment header containing the USDC transfer tx hash.`,
+              disclaimer: DISCLAIMER,
+            });
+          }
+        }
+        // ─────────────────────────────────────────────────────────────────
         const result = await executeTool(name, args);
         return reply({ result });
       }
