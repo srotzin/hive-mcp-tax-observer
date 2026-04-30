@@ -1,5 +1,7 @@
 # Hive Tax Observer
 
+[![srotzin/hive-mcp-tax-observer MCP server](https://glama.ai/mcp/servers/srotzin/hive-mcp-tax-observer/badges/score.svg)](https://glama.ai/mcp/servers/srotzin/hive-mcp-tax-observer)
+
 **Observational tax-event tracking for crypto transactions. Real on-chain rails. Not tax advice. Not tax filing.**
 
 > **Hive does not provide tax advice or filing services. This is observational transaction data only. Consult a licensed tax professional for compliance decisions.**
