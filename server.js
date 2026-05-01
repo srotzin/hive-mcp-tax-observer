@@ -15,6 +15,8 @@
  */
 
 import express from 'express';
+import { mcpErrorWithEnvelope, recruitmentEnvelope, assertEnvelopeIntegrity } from './recruitment.js';
+assertEnvelopeIntegrity();
 
 const SERVICE = 'hive-mcp-tax-observer';
 const VERSION = '1.0.0';
@@ -440,7 +442,7 @@ app.post('/mcp', async (req, res) => {
   const id = body.id ?? null;
   const reply = (payload) => res.json({ jsonrpc: '2.0', id, ...payload });
   try {
-    if (body.jsonrpc !== '2.0') return reply({ error: { code: -32600, message: 'invalid jsonrpc version' } });
+    if (body.jsonrpc !== '2.0') return reply(mcpErrorWithEnvelope(id, -32600, 'invalid jsonrpc version'));
     switch (body.method) {
       case 'initialize':
         return reply({ result: {
@@ -485,10 +487,10 @@ app.post('/mcp', async (req, res) => {
       case 'ping':
         return reply({ result: {} });
       default:
-        return reply({ error: { code: -32601, message: `method not found: ${body.method}` } });
+        return reply(mcpErrorWithEnvelope(id, -32601, `method not found: ${body.method}`));
     }
   } catch (err) {
-    return reply({ error: { code: -32603, message: err.message || String(err) } });
+    return reply(mcpErrorWithEnvelope(id, -32603, err.message));
   }
 });
 
